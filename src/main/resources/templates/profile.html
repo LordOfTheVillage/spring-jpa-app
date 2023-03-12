@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">
+</div>
+<h2 class="page-title" th:text="#{profile.text}"></h2>
+<div class="profile-name">
+    <h1><span th:text="#{welcome} + ', '"></span><span th:text="${user.name}"></span>!</h1>
+    <p><span th:text="#{email} + ': '"></span><span th:text="${user.email}"></span></p>
+    <a href="/create-book" th:text="#{create.book}"></a>
+    <a href="/logout" th:text="#{logout}"></a>
+    <div>
+        <h2 th:text="#{user.books} + ':'"></h2>
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{title}"></th>
+                <th th:text="#{annotation}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.annotation}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

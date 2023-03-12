@@ -1,6 +1,9 @@
-package com.example.japapp.entities;
+package com.example.japapp.models;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "users")
 @Table(
@@ -35,6 +38,14 @@ public class User {
             nullable = false
     )
     private String email;
+    @Column(
+            name = "password",
+            nullable = false
+    )
+    private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books = new ArrayList<>();
 
     public User(String name, String email) {
         this.name = name;
@@ -43,6 +54,10 @@ public class User {
 
     public User() {
 
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 
     public Long getId() {
@@ -67,6 +82,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

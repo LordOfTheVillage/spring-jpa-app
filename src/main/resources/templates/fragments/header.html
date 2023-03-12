@@ -1,9 +1,14 @@
 <div th:fragment="header">
   <nav class="header">
-    <a th:href="@{/}">Main page</a>
-    <a th:href="@{/books}">Main page</a>
-
-    <a th:href="@{/login}">Log in</a>
-    <a th:href="@{/register}">Register</a>
+    <div>
+      <a th:href="@{/}" th:text="#{main.page}">Main page</a>
+      <a th:href="@{/books}" th:text="#{books.page}">Books page</a>
+      <a th:href="@{/login}" th:text="#{login}">Log in</a>
+      <a th:href="@{/registration}" th:text="#{register}">Register</a>
+    </div>
+    <div>
+      <a href="/?language=en" data-th-text="#{label.lang.en}"></a>&nbsp;&nbsp;&nbsp;
+      <a href="/?language=ru" data-th-text="#{label.lang.ru}"></a>
+    </div>
   </nav>
 </div>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create book</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">
+</div>
+<form th:action="@{/create-book}" th:object="${book}" method="POST">
+    <label th:text="#{title} + ': '" for="title"></label>
+    <input type="text" id="title" placeholder="title" th:field="*{title}">
+    <label th:text="#{annotation} + ': '" for="annotation"></label>
+    <input type="text" id="annotation" placeholder="annotation" th:field="*{annotation}">
+    <br />
+    <button type="submit" th:text="#{submit}"></button>
+</form>
+</body>
+</html>
