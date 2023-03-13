@@ -3,11 +3,13 @@
     <div class="w-2/6 flex justify-between">
       <a class="hover:underline hover:text-blue-600" th:href="@{/}" th:text="#{main.page}">Main page</a>
       <a class="hover:underline hover:text-blue-600" th:href="@{/books}" th:text="#{books.page}">Books page</a>
-      <a class="hover:underline hover:text-blue-600" th:href="@{/login}" th:text="#{login}">Log in</a>
-      <a class="hover:underline hover:text-blue-600" th:href="@{/registration}" th:text="#{register}">Register</a>
-    </div>
-    <div th:if="${profileLink}">
-      <a th:href="@{/profile}">Profile</a>
+      <div th:if="${profileLink}">
+        <a th:href="@{/profile}" th:text="#{profile.link}"></a>
+      </div>
+      <div th:unless="${profileLink}">
+        <a class="hover:underline hover:text-blue-600" th:href="@{/login}" th:text="#{login}">Log in</a>
+        <a class="hover:underline hover:text-blue-600" th:href="@{/registration}" th:text="#{register}">Register</a>
+      </div>
     </div>
     <div>
       <a class="hover:underline hover:text-blue-600" href="/?language=en" data-th-text="#{label.lang.en}"></a>&nbsp;&nbsp;&nbsp;

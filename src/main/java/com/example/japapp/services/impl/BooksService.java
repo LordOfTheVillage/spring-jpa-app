@@ -1,8 +1,6 @@
 package com.example.japapp.services.impl;
 
-import com.example.japapp.exeptions.BookCreatingException;
-import com.example.japapp.exeptions.NotFoundBookException;
-import com.example.japapp.exeptions.RegistrationException;
+import com.example.japapp.exeptions.MainException;
 import com.example.japapp.models.Book;
 import com.example.japapp.repositories.BooksRepository;
 import org.springframework.dao.DataAccessException;
@@ -18,41 +16,41 @@ public class BooksService {
         this.booksRepository = booksRepository;
     }
 
-    public Book findById(long id) throws NotFoundBookException {
+    public Book findById(long id) throws MainException {
         Optional<Book> book = this.booksRepository.findById(id);
         if (book.isEmpty()) {
-            throw new NotFoundBookException("Book with this id wasn't found");
+            throw new MainException("Book with this id wasn't found");
         }
         return book.get();
     }
 
-    public Book findByTitle(String title) throws NotFoundBookException {
+    public Book findByTitle(String title) throws MainException {
         Optional<Book> book = this.booksRepository.findBookByTitle(title);
         if (book.isEmpty()) {
-            throw new NotFoundBookException("Book with this id wasn't found");
+            throw new MainException("Book with this id wasn't found");
         }
         return book.get();
     }
 
-    public List<Book> findAllBooks() throws NotFoundBookException {
+    public List<Book> findAllBooks() throws MainException {
         Optional<List<Book>> books = Optional.ofNullable(this.booksRepository.findAll());
         if (books.isEmpty()) {
-            throw new NotFoundBookException("Books are not found");
+            throw new MainException("Books are not found");
         }
 
         return books.get();
     }
 
-    public Book saveBook(Book book) throws BookCreatingException {
+    public Book saveBook(Book book) throws MainException {
         Optional<Book> suspect = this.booksRepository.findBookByTitle(book.getTitle());
         if (suspect.isPresent()) {
-            throw new BookCreatingException("Book with this title already exists!");
+            throw new MainException("Book with this title already exists!");
         }
 
         try {
             return booksRepository.save(book);
         } catch (DataAccessException e) {
-            throw new BookCreatingException("Cannot create book. Please try again later.");
+            throw new MainException("Cannot create book. Please try again later.");
         }
     }
 

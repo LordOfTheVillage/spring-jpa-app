@@ -9,14 +9,17 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ErrorController {
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleInternalServerError(HttpServletResponse response) {
+    public ModelAndView handleInternalServerError(HttpServletResponse response, Exception ex) {
         int status = response.getStatus();
+        ModelAndView modelAndView;
         if (status == HttpStatus.NOT_FOUND.value()) {
-            return new ModelAndView("error/404");
+            modelAndView = new ModelAndView("error/404");
         } else if (status == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            return new ModelAndView("error/500");
+            modelAndView = new ModelAndView("error/500");
         } else {
-            return new ModelAndView("error/error");
+            modelAndView = new ModelAndView("error/error");
         }
+        modelAndView.addObject("errorMessage", ex.getMessage());
+        return modelAndView;
     }
 }

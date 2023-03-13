@@ -1,9 +1,9 @@
 package com.example.japapp.services.impl;
 
+import com.example.japapp.dto.UserDto;
 import com.example.japapp.models.Book;
 import com.example.japapp.models.User;
-import com.example.japapp.exeptions.AuthenticationException;
-import com.example.japapp.exeptions.RegistrationException;
+import com.example.japapp.exeptions.MainException;
 import com.example.japapp.repositories.UsersRepository;
 import com.example.japapp.services.PasswordService;
 import org.hibernate.Hibernate;
@@ -26,46 +26,50 @@ public class UsersService {
     }
 
     public boolean isUserAuthenticated(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // получаем текущую сессию, но не создаем новую, если ее нет
+        HttpSession session = request.getSession(false);
         if (session != null) {
             Object userAttribute = session.getAttribute("user");
             if (userAttribute != null && userAttribute instanceof User) {
-                // если атрибут "user" есть в сессии и является объектом User, значит пользователь авторизован
                 return true;
             }
         }
         return false;
     }
 
-    public User saveUser(User user) {
-        if (findByEmail(user.getEmail()) != null) {
-            throw new RegistrationException("User with this email already exists!");
+    public UserDto saveUser(User user) {
+        if (usersRepository.findByEmail(user.getEmail()) != null) {
+            throw new MainException("User with this email already exists!");
         }
         try {
             String encodedPassword = this.passwordService.hashPassword(user.getPassword());
             user.setPassword(encodedPassword);
-            return usersRepository.save(user);
+            User savedUser = usersRepository.save(user);
+            return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
         } catch (DataAccessException e) {
-            throw new RegistrationException("Unable to register user. Please try again later.");
+            throw new MainException("Unable to register user. Please try again later.");
         }
     }
 
-    public User authenticate(String email, String password) throws AuthenticationException {
-        User user = this.findByEmail(email);
+    public UserDto authenticate(String email, String password) throws MainException {
+        User user = usersRepository.findByEmail(email);
 
         if (user == null) {
-            throw new AuthenticationException("Invalid email or password");
+            throw new MainException("Invalid email or password");
         }
 
         if (!this.passwordService.checkPassword(password, user.getPassword())) {
-            throw new AuthenticationException("Invalid email or password");
+            throw new MainException("Invalid email or password");
         }
 
-        return user;
+        UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
+
+        return userDto;
     }
 
-    public User findByEmail(String email) {
-        return this.usersRepository.findByEmail(email);
+    public UserDto findByEmail(String email) {
+        User user = this.usersRepository.findByEmail(email);
+        UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
+        return userDto;
     }
 
     @Transactional

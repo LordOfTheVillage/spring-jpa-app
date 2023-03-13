@@ -10,8 +10,8 @@
 </div>
 <h2 class="page-title" th:text="#{profile.text}"></h2>
 <div class="profile-name">
-    <h1><span th:text="#{welcome} + ', '"></span><span th:text="${user.name}"></span>!</h1>
-    <p><span th:text="#{email} + ': '"></span><span th:text="${user.email}"></span></p>
+    <h1><span th:text="#{welcome} + ', '"></span><span th:text="${profiler.name}"></span>!</h1>
+    <p><span th:text="#{email} + ': '"></span><span th:text="${profiler.email}"></span></p>
     <a class="hover:underline hover:text-blue-600" href="/create-book" th:text="#{create.book}"></a>
     <a class="hover:underline hover:text-blue-600" href="/logout" th:text="#{logout}"></a>
     <div>

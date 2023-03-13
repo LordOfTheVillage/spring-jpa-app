@@ -8,7 +8,7 @@
 <body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
-<form class="flex flex-col" th:action="@{/login}" th:object="${user}" method="POST">
+<form class="flex flex-col" th:action="@{/login}" th:object="${suspect}" method="POST">
   <div class="mt-2 mb-2">
     <label th:text="#{email} + ': '" for="email" />
     <input type="email" id="email" placeholder="example@ex.com" th:field="*{email}">

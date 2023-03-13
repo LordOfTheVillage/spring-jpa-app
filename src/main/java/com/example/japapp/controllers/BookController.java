@@ -1,7 +1,7 @@
 package com.example.japapp.controllers;
 
-import com.example.japapp.exeptions.BookCreatingException;
-import com.example.japapp.exeptions.NotFoundBookException;
+import com.example.japapp.dto.UserDto;
+import com.example.japapp.exeptions.MainException;
 import com.example.japapp.models.Book;
 import com.example.japapp.models.User;
 import com.example.japapp.services.impl.BooksService;
@@ -27,7 +27,7 @@ public class BookController {
             List<Book> books = bookService.findAllBooks();
             model.addAttribute("books", books);
             return "books";
-        } catch (NotFoundBookException e) {
+        } catch (MainException e) {
             return "redirect:/error/500";
         }
     }
@@ -38,7 +38,7 @@ public class BookController {
             Book book = bookService.findById(bookId);
             model.addAttribute("book", book);
             return "book";
-        } catch (NotFoundBookException e) {
+        } catch (MainException e) {
             model.addAttribute("bookException", e.getMessage());
             return "redirect:/";
         }
@@ -53,13 +53,19 @@ public class BookController {
     @PostMapping("/create-book")
     public String postUser(@ModelAttribute("book") Book suspect, Model model, HttpServletRequest request) {
         try {
-            User user = (User) request.getSession().getAttribute("user");
-            suspect.setUser(user);
+            UserDto userDto = (UserDto) request.getSession().getAttribute("user");
+            suspect.setUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail()));
             Book book = bookService.saveBook(suspect);
             return "redirect:/books/" + book.getId();
-        } catch (BookCreatingException e) {
+        } catch (MainException e) {
             model.addAttribute("createBookException", e.getMessage());
             return "redirect:/create-book";
         }
+    }
+
+    @ModelAttribute("profileLink")
+    public String profileLink(HttpServletRequest request) {
+        UserDto user = (UserDto) request.getSession().getAttribute("user");
+        return user != null ? "/profile" : null;
     }
 }
