@@ -77,4 +77,10 @@ public class MainController {
         return "profile";
     }
 
+    @ModelAttribute("profileLink")
+    public String profileLink(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        return user != null ? "/profile" : null;
+    }
+
 }

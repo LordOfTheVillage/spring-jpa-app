@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
 <h2 class="page-title" th:text="#{profile.text}"></h2>
 <div class="profile-name">
     <h1><span th:text="#{welcome} + ', '"></span><span th:text="${user.name}"></span>!</h1>
     <p><span th:text="#{email} + ': '"></span><span th:text="${user.email}"></span></p>
-    <a href="/create-book" th:text="#{create.book}"></a>
-    <a href="/logout" th:text="#{logout}"></a>
+    <a class="hover:underline hover:text-blue-600" href="/create-book" th:text="#{create.book}"></a>
+    <a class="hover:underline hover:text-blue-600" href="/logout" th:text="#{logout}"></a>
     <div>
         <h2 th:text="#{user.books} + ':'"></h2>
         <table>

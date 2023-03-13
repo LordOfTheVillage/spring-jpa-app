@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
-<form th:action="@{/registration}" th:object="${user}" method="POST">
-    <label th:text="#{name} + ': '" for="username" />
-    <input type="text" id="username" placeholder="username" th:field="*{name}">
-    <label th:text="#{email} + ': '" for="email" />
-    <input type="email" id="email" placeholder="example@ex.com" th:field="*{email}">
-    <label th:text="#{password} + ': '" for="password" />
-    <input type="password" id="password" placeholder="password" th:field="*{password}">
-    <br />
-    <button type="submit" th:text="#{submit}"></button>
+<form class="flex flex-col" th:action="@{/registration}" th:object="${user}" method="POST">
+    <div class="mt-2 mb-2">
+        <label th:text="#{name} + ': '" for="username" />
+        <input type="text" id="username" placeholder="username" th:field="*{name}">
+    </div>
+    <div class="mb-2">
+        <label th:text="#{email} + ': '" for="email" />
+        <input type="email" id="email" placeholder="example@ex.com" th:field="*{email}">
+    </div>
+    <div class="mb-2">
+        <label th:text="#{password} + ': '" for="password" />
+        <input type="password" id="password" placeholder="password" th:field="*{password}">
+    </div>
+    <button class="text-left" type="submit" th:text="#{submit}"></button>
 </form>
 </body>
 </html>

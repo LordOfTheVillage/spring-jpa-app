@@ -8,6 +8,7 @@ import com.example.japapp.repositories.BooksRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +32,15 @@ public class BooksService {
             throw new NotFoundBookException("Book with this id wasn't found");
         }
         return book.get();
+    }
+
+    public List<Book> findAllBooks() throws NotFoundBookException {
+        Optional<List<Book>> books = Optional.ofNullable(this.booksRepository.findAll());
+        if (books.isEmpty()) {
+            throw new NotFoundBookException("Books are not found");
+        }
+
+        return books.get();
     }
 
     public Book saveBook(Book book) throws BookCreatingException {

@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Create book</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
-<form th:action="@{/create-book}" th:object="${book}" method="POST">
-    <label th:text="#{title} + ': '" for="title"></label>
-    <input type="text" id="title" placeholder="title" th:field="*{title}">
-    <label th:text="#{annotation} + ': '" for="annotation"></label>
-    <input type="text" id="annotation" placeholder="annotation" th:field="*{annotation}">
-    <br />
-    <button type="submit" th:text="#{submit}"></button>
+<form class="flex flex-col" th:action="@{/create-book}" th:object="${book}" method="POST">
+    <div class="mt-2 mb-2">
+        <label th:text="#{title} + ': '" for="title"></label>
+        <input type="text" id="title" placeholder="title" th:field="*{title}">
+    </div>
+    <div class="mb-2">
+        <label th:text="#{annotation} + ': '" for="annotation"></label>
+        <input type="text" id="annotation" placeholder="annotation" th:field="*{annotation}">
+    </div>
+    <button class="text-left" type="submit" th:text="#{submit}"></button>
 </form>
 </body>
 </html>

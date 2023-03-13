@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
 <h1 th:text="#{500.page}"></h1>
-<h2><a href="/" th:text="#{to.home}"></a></h2>
+<h2><a class="hover:underline hover:text-blue-600" href="/" th:text="#{to.home}"></a></h2>
 </body>
 </html>

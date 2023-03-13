@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 
 @RequestMapping
 @Controller("/books")
@@ -17,6 +19,17 @@ public class BookController {
     private BooksService bookService;
     public BookController(BooksService bookService) {
         this.bookService = bookService;
+    }
+
+    @GetMapping("/books")
+    public String getBooks(Model model) {
+        try {
+            List<Book> books = bookService.findAllBooks();
+            model.addAttribute("books", books);
+            return "books";
+        } catch (NotFoundBookException e) {
+            return "redirect:/error/500";
+        }
     }
 
     @GetMapping("/books/{bookId}")
