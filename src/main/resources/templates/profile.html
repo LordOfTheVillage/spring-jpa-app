@@ -12,8 +12,14 @@
 <div class="profile-name">
     <h1><span th:text="#{welcome} + ', '"></span><span th:text="${profiler.name}"></span>!</h1>
     <p><span th:text="#{email} + ': '"></span><span th:text="${profiler.email}"></span></p>
-    <a class="hover:underline hover:text-blue-600" href="/create-book" th:text="#{create.book}"></a>
-    <a class="hover:underline hover:text-blue-600" href="/logout" th:text="#{logout}"></a>
+
+    <a class="mt-2 mb-2 hover:underline hover:text-blue-600" href="/create-book" th:text="#{create.book}"></a>
+    <a class="mt-2 mb-2 hover:underline hover:text-blue-600" href="/logout" th:text="#{logout}"></a>
+
+    <form th:action="@{/profile/setAdmin}" method="POST">
+        <button type="submit" th:text="#{set.admin}"></button>
+    </form>
+
     <div>
         <h2 th:text="#{user.books} + ':'"></h2>
         <table>

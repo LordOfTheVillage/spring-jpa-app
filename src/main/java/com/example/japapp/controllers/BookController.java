@@ -1,7 +1,7 @@
 package com.example.japapp.controllers;
 
 import com.example.japapp.dto.UserDto;
-import com.example.japapp.exeptions.MainException;
+import com.example.japapp.exceptions.MainException;
 import com.example.japapp.models.Book;
 import com.example.japapp.models.User;
 import com.example.japapp.services.impl.BooksService;
@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RequestMapping
-@Controller("/books")
+@Controller()
 public class BookController {
     private BooksService bookService;
     public BookController(BooksService bookService) {

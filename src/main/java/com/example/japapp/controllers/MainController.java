@@ -3,7 +3,7 @@ package com.example.japapp.controllers;
 import com.example.japapp.dto.UserDto;
 import com.example.japapp.models.Book;
 import com.example.japapp.models.User;
-import com.example.japapp.exeptions.MainException;
+import com.example.japapp.exceptions.MainException;
 import com.example.japapp.services.impl.UsersService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -75,6 +75,19 @@ public class MainController {
         model.addAttribute("profiler", user);
         model.addAttribute("books", books);
         return "profile";
+    }
+
+    @PostMapping("/profile/setAdmin")
+    public String setAdmin(HttpServletRequest request) {
+        try {
+            UserDto user = (UserDto) request.getSession().getAttribute("user");
+            user = userService.setAdminRole(user.getId());
+            request.getSession().setAttribute("user", user);
+
+            return "redirect:/users";
+        } catch (MainException e) {
+            return "redirect:/profile";
+        }
     }
 
     @ModelAttribute("profileLink")

@@ -1,6 +1,6 @@
 package com.example.japapp.services.impl;
 
-import com.example.japapp.exeptions.MainException;
+import com.example.japapp.exceptions.MainException;
 import com.example.japapp.models.Book;
 import com.example.japapp.repositories.BooksRepository;
 import org.springframework.dao.DataAccessException;

@@ -1,8 +1,12 @@
 package com.example.japapp.dto;
 
 import com.example.japapp.models.Book;
+import com.example.japapp.models.Role;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserDto {
 
@@ -13,6 +17,8 @@ public class UserDto {
     private String email;
 
     private List<Book> books = new ArrayList<>();
+
+    private Set<Role> roles = new HashSet<>();
 
     public UserDto() {
 
@@ -28,6 +34,25 @@ public class UserDto {
         this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    public UserDto(Long id, String name, String email, Set<Role> roles) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.roles = roles;
+    }
+
+    public boolean hasRole(String roleName) {
+        return roles.stream().anyMatch(role -> role.getName().equals(roleName));
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Long getId() {

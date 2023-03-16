@@ -3,10 +3,11 @@
     <div class="w-2/6 flex justify-between">
       <a class="hover:underline hover:text-blue-600" th:href="@{/}" th:text="#{main.page}">Main page</a>
       <a class="hover:underline hover:text-blue-600" th:href="@{/books}" th:text="#{books.page}">Books page</a>
-      <div th:if="${profileLink}">
+      <div class="w-1/2 flex justify-around" th:if="${profileLink}">
         <a th:href="@{/profile}" th:text="#{profile.link}"></a>
+        <a th:href="@{/users}" th:text="#{users.page}"></a>
       </div>
-      <div th:unless="${profileLink}">
+      <div class="w-1/2 flex justify-around" th:unless="${profileLink}">
         <a class="hover:underline hover:text-blue-600" th:href="@{/login}" th:text="#{login}">Log in</a>
         <a class="hover:underline hover:text-blue-600" th:href="@{/registration}" th:text="#{register}">Register</a>
       </div>

@@ -3,7 +3,7 @@ package com.example.japapp.services.impl;
 import com.example.japapp.dto.UserDto;
 import com.example.japapp.models.Book;
 import com.example.japapp.models.User;
-import com.example.japapp.exeptions.MainException;
+import com.example.japapp.exceptions.MainException;
 import com.example.japapp.repositories.UsersRepository;
 import com.example.japapp.services.PasswordService;
 import org.hibernate.Hibernate;
@@ -13,16 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UsersService {
     private final UsersRepository usersRepository;
     private final PasswordService passwordService;
+    private final RolesService rolesService;
 
-    public UsersService(UsersRepository usersRepository, PasswordService passwordService) {
+    public UsersService(UsersRepository usersRepository, PasswordService passwordService, RolesService rolesService) {
         this.usersRepository = usersRepository;
         this.passwordService = passwordService;
+        this.rolesService = rolesService;
     }
 
     public boolean isUserAuthenticated(HttpServletRequest request) {
@@ -43,8 +45,9 @@ public class UsersService {
         try {
             String encodedPassword = this.passwordService.hashPassword(user.getPassword());
             user.setPassword(encodedPassword);
+            rolesService.setUserRole(user);
             User savedUser = usersRepository.save(user);
-            return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+            return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRoles());
         } catch (DataAccessException e) {
             throw new MainException("Unable to register user. Please try again later.");
         }
@@ -70,6 +73,30 @@ public class UsersService {
         User user = this.usersRepository.findByEmail(email);
         UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
         return userDto;
+    }
+
+    public List<UserDto> findAllUsers() {
+        List<User> users = this.usersRepository.findAll();
+        List<UserDto> usersDto = new ArrayList<>();
+        for (User user : users) {
+            usersDto.add(new UserDto(user.getId(), user.getName(), user.getEmail(), user.getRoles()));
+        }
+
+        return usersDto;
+    }
+
+    public UserDto setAdminRole(Long id) {
+        Optional<User> optionalUser = usersRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new MainException("Unable to change user's role. Please try again later.");
+        }
+
+        User user = optionalUser.get();
+        rolesService.setAdminRole(user);
+        User savedUser = usersRepository.save(user);
+
+        return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRoles());
     }
 
     @Transactional
