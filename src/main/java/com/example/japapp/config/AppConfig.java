@@ -1,7 +1,7 @@
 package com.example.japapp.config;
 
-import com.example.japapp.filters.RoleFilter;
-import com.example.japapp.services.impl.UsersService;
+import com.example.japapp.filter.RoleFilter;
+import com.example.japapp.service.impl.UsersService;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
     @Bean
-    public FilterRegistrationBean<RoleFilter> roleBasedFilterRegistrationBean(UsersService usersService) {
+    public FilterRegistrationBean<RoleFilter> roleBasedFilterRegistrationBean() {
         FilterRegistrationBean<RoleFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new RoleFilter(usersService));
+        registrationBean.setFilter(new RoleFilter());
         registrationBean.addUrlPatterns("/users/*");
         return registrationBean;
     }
