@@ -12,9 +12,11 @@
         <a class="hover:underline hover:text-blue-600" th:href="@{/registration}" th:text="#{registerLabel}">Register</a>
       </div>
     </div>
-    <div>
-      <a class="hover:underline hover:text-blue-600" href="?language=en" data-th-text="#{label.lang.en}"></a>&nbsp;&nbsp;&nbsp;
-      <a class="hover:underline hover:text-blue-600" href="?language=ru" data-th-text="#{label.lang.ru}"></a>
+    <div class="">
+      <div class="rounded-full border-4 border-blue-500">
+        <a class="rounded-full pl-2 py-1 pr-3" href="?language=en" data-th-text="#{label.lang.en}" th:classappend="__${#locale}__ == 'en' ? 'bg-blue-500 text-white' : ''"></a>
+        <a class="rounded-full pr-2 py-1 pl-3" href="?language=ru" data-th-text="#{label.lang.ru}" th:classappend="__${#locale}__ == 'ru' ? 'bg-blue-500 text-white' : ''"></a>
+      </div>
     </div>
   </nav>
 </div>

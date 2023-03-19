@@ -8,7 +8,7 @@
 <body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
-<h2 class="page-title" th:text="#{profile.text}"></h2>
+<h2  class="page-title text-2xl" th:text="#{profile.text}"></h2>
 <div class="profile-name">
     <h1><span th:text="#{profile.welcomeLabel} + ', '"></span><span th:text="${profiler.name}"></span>!</h1>
     <p><span th:text="#{form.emailLabel} + ': '"></span><span th:text="${profiler.email}"></span></p>
