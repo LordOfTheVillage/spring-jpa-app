@@ -4,17 +4,17 @@
       <a class="hover:underline hover:text-blue-600" th:href="@{/}" th:text="#{main.page}">Main page</a>
       <a class="hover:underline hover:text-blue-600" th:href="@{/books}" th:text="#{books.page}">Books page</a>
       <div class="w-1/2 flex justify-around" th:if="${profileLink}">
-        <a th:href="@{/profile}" th:text="#{profile.link}"></a>
-        <a th:href="@{/users}" th:text="#{users.page}"></a>
+        <a th:href="@{/profile}" th:text="#{profile.linkLabel}"></a>
+        <a th:href="@{/users}" th:text="#{users.pageLabel}"></a>
       </div>
       <div class="w-1/2 flex justify-around" th:unless="${profileLink}">
-        <a class="hover:underline hover:text-blue-600" th:href="@{/login}" th:text="#{login}">Log in</a>
-        <a class="hover:underline hover:text-blue-600" th:href="@{/registration}" th:text="#{register}">Register</a>
+        <a class="hover:underline hover:text-blue-600" th:href="@{/login}" th:text="#{loginLabel}">Log in</a>
+        <a class="hover:underline hover:text-blue-600" th:href="@{/registration}" th:text="#{registerLabel}">Register</a>
       </div>
     </div>
     <div>
-      <a class="hover:underline hover:text-blue-600" href="/?language=en" data-th-text="#{label.lang.en}"></a>&nbsp;&nbsp;&nbsp;
-      <a class="hover:underline hover:text-blue-600" href="/?language=ru" data-th-text="#{label.lang.ru}"></a>
+      <a class="hover:underline hover:text-blue-600" href="?language=en" data-th-text="#{label.lang.en}"></a>&nbsp;&nbsp;&nbsp;
+      <a class="hover:underline hover:text-blue-600" href="?language=ru" data-th-text="#{label.lang.ru}"></a>
     </div>
   </nav>
 </div>

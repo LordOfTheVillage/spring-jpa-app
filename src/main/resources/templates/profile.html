@@ -10,23 +10,23 @@
 </div>
 <h2 class="page-title" th:text="#{profile.text}"></h2>
 <div class="profile-name">
-    <h1><span th:text="#{welcome} + ', '"></span><span th:text="${profiler.name}"></span>!</h1>
-    <p><span th:text="#{email} + ': '"></span><span th:text="${profiler.email}"></span></p>
+    <h1><span th:text="#{profile.welcomeLabel} + ', '"></span><span th:text="${profiler.name}"></span>!</h1>
+    <p><span th:text="#{form.emailLabel} + ': '"></span><span th:text="${profiler.email}"></span></p>
     <div class="mt-2 mb-2">
         <a class="mr-3 hover:underline hover:text-blue-600" href="/create-book" th:text="#{create.book}"></a>
-        <a class="hover:underline hover:text-blue-600" href="/logout" th:text="#{logout}"></a>
+        <a class="hover:underline hover:text-blue-600" href="/logout" th:text="#{profile.logoutLabel}"></a>
     </div>
     <form class="mt-2 mb-2" th:action="@{/profile/setAdmin}" method="POST">
         <button class="hover:underline hover:text-blue-600" type="submit" th:text="#{set.admin}"></button>
     </form>
 
     <div>
-        <h2 th:text="#{user.books} + ':'"></h2>
+        <h2 th:text="#{profile.user.booksLabel} + ':'"></h2>
         <table>
             <thead>
             <tr>
-                <th th:text="#{title}"></th>
-                <th th:text="#{annotation}"></th>
+                <th th:text="#{profile.titleLabel}"></th>
+                <th th:text="#{profile.annotationLabel}"></th>
             </tr>
             </thead>
             <tbody>

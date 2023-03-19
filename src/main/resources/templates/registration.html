@@ -10,11 +10,11 @@
 </div>
 <form class="grid gap-2 max-w-xs mx-auto" th:action="@{/registration}" th:object="${suspect}" method="POST">
     <div class="flex flex-col">
-        <label th:text="#{name} + ': '" for="username" />
+        <label th:text="#{form.nameLabel} + ': '" for="username" />
         <input type="text" id="username" placeholder="username" th:field="*{name}" class="border-2 rounded-md px-2 py-1">
     </div>
     <div class="flex flex-col">
-        <label th:text="#{email} + ': '" for="email" />
+        <label th:text="#{form.emailLabel} + ': '" for="email" />
         <input
                 type="email"
                 id="email"
@@ -24,13 +24,13 @@
         >
     </div>
     <div class="flex flex-col">
-        <label th:text="#{password} + ': '" for="password" />
+        <label th:text="#{form.passwordLabel} + ': '" for="password" />
         <input type="password" id="password" placeholder="password" th:field="*{password}" class="border-2 rounded-md px-2 py-1">
     </div>
     <button
             class="text-center rounded-md px-2 py-1 text-white bg-blue-500"
             type="submit"
-            th:text="#{submit}">
+            th:text="#{submitLabel}">
     </button>
 </form>
 </body>
