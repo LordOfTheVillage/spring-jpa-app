@@ -1,6 +1,7 @@
 package com.example.japapp.service.impl;
 
 import com.example.japapp.dto.UserDto;
+import com.example.japapp.mapper.UserMapper;
 import com.example.japapp.model.Book;
 import com.example.japapp.model.User;
 import com.example.japapp.exception.MainException;
@@ -31,6 +32,7 @@ public class UsersService {
         HttpSession session = request.getSession(false);
         if (session != null) {
             Object userAttribute = session.getAttribute("user");
+            // TODO: Logic of authenticate
             if (userAttribute != null && userAttribute instanceof User) {
                 return true;
             }
@@ -47,7 +49,7 @@ public class UsersService {
             user.setPassword(encodedPassword);
             rolesService.setUserRole(user);
             User savedUser = usersRepository.save(user);
-            return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRoles());
+            return UserMapper.toUserDto(savedUser);
         } catch (DataAccessException e) {
             throw new MainException("Unable to register user. Please try again later.");
         }
@@ -64,25 +66,17 @@ public class UsersService {
             throw new MainException("Invalid email or password");
         }
 
-        UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
-
-        return userDto;
+        return UserMapper.toUserDto(user);
     }
 
     public UserDto findByEmail(String email) {
         User user = this.usersRepository.findByEmail(email);
-        UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
-        return userDto;
+        return UserMapper.toUserDto(user);
     }
 
     public List<UserDto> findAllUsers() {
         List<User> users = this.usersRepository.findAll();
-        List<UserDto> usersDto = new ArrayList<>();
-        for (User user : users) {
-            usersDto.add(new UserDto(user.getId(), user.getName(), user.getEmail(), user.getRoles()));
-        }
-
-        return usersDto;
+        return users.stream().map(UserMapper::toUserDto).toList();
     }
 
     public UserDto setAdminRole(Long id) {
@@ -96,7 +90,7 @@ public class UsersService {
         rolesService.setAdminRole(user);
         User savedUser = usersRepository.save(user);
 
-        return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRoles());
+        return UserMapper.toUserDto(savedUser);
     }
 
     @Transactional
