@@ -8,20 +8,30 @@
 <body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
-<form class="flex flex-col" th:action="@{/registration}" th:object="${suspect}" method="POST">
-    <div class="mt-2 mb-2">
+<form class="grid gap-2 max-w-xs mx-auto" th:action="@{/registration}" th:object="${suspect}" method="POST">
+    <div class="flex flex-col">
         <label th:text="#{name} + ': '" for="username" />
-        <input type="text" id="username" placeholder="username" th:field="*{name}">
+        <input type="text" id="username" placeholder="username" th:field="*{name}" class="border-2 rounded-md px-2 py-1">
     </div>
-    <div class="mb-2">
+    <div class="flex flex-col">
         <label th:text="#{email} + ': '" for="email" />
-        <input type="email" id="email" placeholder="example@ex.com" th:field="*{email}">
+        <input
+                type="email"
+                id="email"
+                placeholder="example@ex.com"
+                th:field="*{email}"
+                class="border-2 rounded-md px-2 py-1"
+        >
     </div>
-    <div class="mb-2">
+    <div class="flex flex-col">
         <label th:text="#{password} + ': '" for="password" />
-        <input type="password" id="password" placeholder="password" th:field="*{password}">
+        <input type="password" id="password" placeholder="password" th:field="*{password}" class="border-2 rounded-md px-2 py-1">
     </div>
-    <button class="text-left" type="submit" th:text="#{submit}"></button>
+    <button
+            class="text-center rounded-md px-2 py-1 text-white bg-blue-500"
+            type="submit"
+            th:text="#{submit}">
+    </button>
 </form>
 </body>
 </html>
