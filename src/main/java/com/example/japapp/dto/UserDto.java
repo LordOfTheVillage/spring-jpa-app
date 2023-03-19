@@ -1,7 +1,7 @@
 package com.example.japapp.dto;
 
-import com.example.japapp.models.Book;
-import com.example.japapp.models.Role;
+import com.example.japapp.model.Book;
+import com.example.japapp.model.Role;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,9 +20,7 @@ public class UserDto {
 
     private Set<Role> roles = new HashSet<>();
 
-    public UserDto() {
-
-    }
+    public UserDto() {}
     public UserDto(Long id, String name, String email, List<Book> books) {
         this.id = id;
         this.name = name;
