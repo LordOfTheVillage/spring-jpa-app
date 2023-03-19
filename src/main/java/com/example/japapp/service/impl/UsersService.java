@@ -33,9 +33,7 @@ public class UsersService {
         if (session != null) {
             Object userAttribute = session.getAttribute("user");
             // TODO: Logic of authenticate
-            if (userAttribute != null && userAttribute instanceof User) {
-                return true;
-            }
+            return userAttribute instanceof User;
         }
         return false;
     }

@@ -1,7 +1,6 @@
 package com.example.japapp.filter;
 
 import com.example.japapp.dto.UserDto;
-import com.example.japapp.service.impl.UsersService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,13 +10,6 @@ import java.io.IOException;
 
 @Component
 public class RoleFilter implements Filter {
-
-    private final UsersService usersService;
-
-    public RoleFilter(UsersService usersService) {
-        this.usersService = usersService;
-    }
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -25,6 +17,7 @@ public class RoleFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        // TODO: Check actual user state (received from UsersService)
         UserDto user = (UserDto) httpRequest.getSession().getAttribute("user");
         if (user != null) {
             if (user.hasRole("ADMIN")) {

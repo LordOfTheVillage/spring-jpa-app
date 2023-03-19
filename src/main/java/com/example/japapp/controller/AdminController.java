@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    private UsersService usersService;
+    private final UsersService usersService;
     public AdminController(UsersService usersService) {
         this.usersService = usersService;
     }
