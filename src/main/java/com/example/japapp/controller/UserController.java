@@ -15,10 +15,10 @@ import java.util.List;
 
 @RequestMapping
 @Controller
-public class MainController {
-    private UsersService userService;
-    public MainController(UsersService userService) {
-        this.userService = userService;
+public class UserController {
+    private final UsersService usersService;
+    public UserController(UsersService usersService) {
+        this.usersService = usersService;
     }
     @GetMapping("")
     public String getHomePage() {
@@ -34,7 +34,7 @@ public class MainController {
     @PostMapping("/registration")
     public String postUser(@ModelAttribute("suspect") User suspect, HttpServletRequest request, Model model) {
         try {
-            UserDto savedUser = userService.saveUser(suspect);
+            UserDto savedUser = usersService.saveUser(suspect);
             request.getSession().setAttribute("user", savedUser);
         } catch (MainException e) {
             model.addAttribute("registerError", e.getMessage());
@@ -53,7 +53,7 @@ public class MainController {
     @PostMapping("/login")
     public String doLogin(@ModelAttribute("suspect") User suspect, HttpServletRequest request, RedirectAttributes redirectAttrs) {
         try {
-            UserDto user = userService.authenticate(suspect.getEmail(), suspect.getPassword());
+            UserDto user = usersService.authenticate(suspect.getEmail(), suspect.getPassword());
             request.getSession().setAttribute("user", user);
             return "redirect:/profile";
         } catch (MainException e) {
@@ -71,7 +71,7 @@ public class MainController {
     @GetMapping("/profile")
     public String getProfile(HttpServletRequest request, Model model) {
         UserDto user = (UserDto) request.getSession().getAttribute("user");
-        List<Book> books = this.userService.findAllBooksByUserId(user.getId());
+        List<Book> books = this.usersService.findAllBooksByUserId(user.getId());
         model.addAttribute("profiler", user);
         model.addAttribute("books", books);
         return "profile";
@@ -81,7 +81,7 @@ public class MainController {
     public String setAdmin(HttpServletRequest request) {
         try {
             UserDto user = (UserDto) request.getSession().getAttribute("user");
-            user = userService.setAdminRole(user.getId());
+            user = usersService.setAdminRole(user.getId());
             request.getSession().setAttribute("user", user);
 
             return "redirect:/users";
