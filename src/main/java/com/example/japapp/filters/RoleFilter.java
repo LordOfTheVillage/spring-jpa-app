@@ -27,20 +27,15 @@ public class RoleFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        String requestURI = httpRequest.getRequestURI();
-
-        if (requestURI.startsWith("/users")) {
-            UserDto user = (UserDto) httpRequest.getSession().getAttribute("user");
-            if (user != null) {
-                if (user.hasRole("ADMIN")) {
-                    chain.doFilter(request, response);
-                    return;
-                }
+        UserDto user = (UserDto) httpRequest.getSession().getAttribute("user");
+        if (user != null) {
+            if (user.hasRole("ADMIN")) {
+                chain.doFilter(request, response);
+                return;
             }
-
-            httpResponse.sendRedirect("/");
-            return;
         }
+
+        httpResponse.sendRedirect("/");
 
         chain.doFilter(request, response);
     }
