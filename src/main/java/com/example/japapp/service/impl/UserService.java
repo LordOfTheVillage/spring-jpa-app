@@ -21,11 +21,16 @@ public class UserService {
     private final UsersRepository usersRepository;
     private final PasswordService passwordService;
     private final RoleService roleService;
+    private EmailService emailService;
 
-    public UserService(UsersRepository usersRepository, PasswordService passwordService, RoleService roleService) {
+    public UserService(UsersRepository usersRepository,
+                       PasswordService passwordService,
+                       RoleService roleService,
+                       EmailService emailService) {
         this.usersRepository = usersRepository;
         this.passwordService = passwordService;
         this.roleService = roleService;
+        this.emailService = emailService;
     }
 
     public boolean isUserAuthenticated(HttpServletRequest request) {
@@ -38,7 +43,7 @@ public class UserService {
         return false;
     }
 
-    public UserDto saveUser(User user) {
+    public void saveUser(User user) {
         if (usersRepository.findByEmail(user.getEmail()) != null) {
             throw new MainException("User with this email already exists!");
         }
@@ -46,8 +51,7 @@ public class UserService {
             String encodedPassword = this.passwordService.hashPassword(user.getPassword());
             user.setPassword(encodedPassword);
             roleService.setUserRole(user);
-            User savedUser = usersRepository.save(user);
-            return UserMapper.toUserDto(savedUser);
+            this.emailService.register(user);
         } catch (DataAccessException e) {
             throw new MainException("Unable to register user. Please try again later.");
         }
@@ -99,5 +103,10 @@ public class UserService {
             return user.getBooks();
         }
         return null;
+    }
+
+    public UserDto confirm(String token) {
+        User user = this.emailService.confirm(token);
+        return UserMapper.toUserDto(user);
     }
 }

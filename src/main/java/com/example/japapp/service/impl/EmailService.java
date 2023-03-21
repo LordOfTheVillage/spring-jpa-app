@@ -1,40 +1,54 @@
 package com.example.japapp.service.impl;
 
+import com.example.japapp.exception.MainException;
+import com.example.japapp.model.User;
 import com.example.japapp.repository.UsersRepository;
-import com.example.japapp.service.PasswordService;
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
-import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class EmailService {
 
     private JavaMailSender javaMailSender;
+    private UsersRepository usersRepository;
 
-    public EmailService(JavaMailSender javaMailSender) {
+    public EmailService(JavaMailSender javaMailSender, UsersRepository usersRepository) {
         this.javaMailSender = javaMailSender;
+        this.usersRepository = usersRepository;
     }
 
 
-    public void sendVerificationEmail(String to, String verificationCode) throws MessagingException, jakarta.mail.MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+    public void register(User user) {
+        // отправляем электронное письмо с ссылкой на подтверждение регистрации
+        String token = UUID.randomUUID().toString();
 
-        helper.setTo(to);
-        helper.setSubject("Verification Email");
-        helper.setText("Your verification code is " + verificationCode);
+        user.setVerificationToken(token);
+        user.setActive(false);
+        usersRepository.save(user);
 
-        javaMailSender.send(message);
+        this.sendVerificationEmail(user, token);
     }
 
-    public String generateVerificationCode() {
-        Random random = new Random();
-        int code = random.nextInt(900000) + 100000; // генерация числа от 100000 до 999999
-        return String.valueOf(code);
+    public void sendVerificationEmail(User user, String token) {
+        String confirmationUrl = "http://localhost:8080/confirm?token=" + token;
+        String message = "Здравствуйте, " + user.getEmail() + "! Для подтверждения регистрации на сайте перейдите по ссылке: " + confirmationUrl;
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(user.getEmail());
+        email.setSubject("Подтверждение регистрации");
+        email.setText(message);
+        javaMailSender.send(email);
+    }
+
+
+    public User confirm(String token) {
+        User user = usersRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new MainException("User not found for token: " + token));
+        user.setActive(true);
+        user.setVerificationToken(null);
+        usersRepository.save(user);
+        return user;
     }
 }

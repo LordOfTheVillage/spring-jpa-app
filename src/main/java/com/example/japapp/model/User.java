@@ -43,6 +43,18 @@ public class User {
     )
     private String password;
 
+    @Column(
+            name = "status",
+            nullable = false
+    )
+    private Boolean active = false;
+
+    @Column(
+            name = "verification_token",
+            nullable = true
+    )
+    private String verificationToken;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
 
@@ -77,6 +89,21 @@ public class User {
         return roles;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+    }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;

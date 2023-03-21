@@ -38,19 +38,22 @@ public class UserController {
     @PostMapping("/registration")
     public String postUser(@ModelAttribute("suspect") User suspect, HttpServletRequest request, Model model) {
         try {
-            String verificationCode = emailService.generateVerificationCode();
-            emailService.sendVerificationEmail(suspect.getEmail(), verificationCode);
-            UserDto savedUser = userService.saveUser(suspect);
-            request.getSession().setAttribute("user", savedUser);
+//            String verificationCode = emailService.generateVerificationCode();
+//            emailService.sendVerificationEmail(suspect.getEmail(), verificationCode);
+            userService.saveUser(suspect);
+//            request.getSession().setAttribute("user", savedUser);
         } catch (MainException e) {
             model.addAttribute("registerError", e.getMessage());
             return "registration";
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (jakarta.mail.MessagingException e) {
-            throw new RuntimeException(e);
         }
 
+        return "redirect:/";
+    }
+
+    @GetMapping("/confirm")
+    public String confirm(@RequestParam("token") String token, HttpServletRequest request) {
+        UserDto user = userService.confirm(token);
+        request.getSession().setAttribute("user", user);
         return "redirect:/profile";
     }
 
