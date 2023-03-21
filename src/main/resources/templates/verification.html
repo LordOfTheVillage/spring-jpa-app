@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="pl-10 pr-10">
+<div th:replace="~{fragments/header :: header}">
+</div>
+<form class="grid gap-2 max-w-xs mx-auto" th:action="@{/registration}" method="POST">
+  <div class="flex flex-col">
+    <label th:text="#{form.codeLabel} + ': '" for="code" />
+    <input type="number" id="code" placeholder="code" th:field="${code}" class="border-2 rounded-md px-2 py-1">
+  </div>
+  <button
+          class="text-center rounded-md px-2 py-1 text-white bg-blue-500"
+          type="submit"
+          th:text="#{submitLabel}">
+  </button>
+</form>
+</body>
+</html>
