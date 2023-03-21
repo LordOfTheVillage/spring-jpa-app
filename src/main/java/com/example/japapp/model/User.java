@@ -2,6 +2,7 @@ package com.example.japapp.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity(name = "users")
@@ -54,6 +55,13 @@ public class User {
             nullable = true
     )
     private String verificationToken;
+
+    private LocalDateTime created_at;
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = LocalDateTime.now();
+    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
