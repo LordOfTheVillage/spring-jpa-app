@@ -3,9 +3,16 @@ package com.example.japapp.service.impl;
 import com.example.japapp.exception.MainException;
 import com.example.japapp.model.User;
 import com.example.japapp.repository.UsersRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
 import java.util.UUID;
 
 @Service
@@ -13,33 +20,47 @@ public class EmailService {
 
     private JavaMailSender javaMailSender;
     private UsersRepository usersRepository;
+    private TemplateEngine templateEngine;
+    private HttpServletRequest request;
 
-    public EmailService(JavaMailSender javaMailSender, UsersRepository usersRepository) {
+    public EmailService(JavaMailSender javaMailSender,
+                        UsersRepository usersRepository,
+                        TemplateEngine templateEngine,
+                        HttpServletRequest request) {
         this.javaMailSender = javaMailSender;
         this.usersRepository = usersRepository;
+        this.templateEngine = templateEngine;
+        this.request = request;
     }
 
 
-    public void register(User user) {
-        // отправляем электронное письмо с ссылкой на подтверждение регистрации
+    public void register(User user) throws MessagingException {
         String token = UUID.randomUUID().toString();
 
         user.setVerificationToken(token);
         user.setActive(false);
         usersRepository.save(user);
 
-        this.sendVerificationEmail(user, token);
+        this.sendVerificationEmail(user.getEmail(), token);
     }
 
-    public void sendVerificationEmail(User user, String token) {
-        String confirmationUrl = "http://localhost:8080/confirm?token=" + token;
-        String message = "Здравствуйте, " + user.getEmail() + "! Для подтверждения регистрации на сайте перейдите по ссылке: " + confirmationUrl;
+    public void sendVerificationEmail(String email, String token) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setTo(email);
+        helper.setSubject("Подтверждение регистрации");
 
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(user.getEmail());
-        email.setSubject("Подтверждение регистрации");
-        email.setText(message);
-        javaMailSender.send(email);
+        String domain = request.getServerName();
+        int port = request.getServerPort();
+
+        Context context = new Context();
+        context.setVariable("domain", domain + ":" + port);
+        context.setVariable("token", token);
+
+        String html = templateEngine.process("confirm-email", context);
+        helper.setText(html, true);
+
+        javaMailSender.send(message);
     }
 
 

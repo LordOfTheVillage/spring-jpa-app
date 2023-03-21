@@ -4,9 +4,9 @@ import com.example.japapp.model.User;
 import com.example.japapp.repository.UsersRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class UserCleanupService {
@@ -16,9 +16,10 @@ public class UserCleanupService {
         this.usersRepository = usersRepository;
     }
 
-    @Scheduled(fixedRate = 86400000) // запускать задачу каждые 24 часа
+    @Scheduled(fixedRate = 1800000)
+    @Transactional
     public void deleteInactiveUsers() {
-        List<User> inactiveUsers = usersRepository.findByActiveFalseAndCreated_atBefore(LocalDateTime.now().minusMinutes(30));
-        usersRepository.deleteAll(inactiveUsers);
+        LocalDateTime date = LocalDateTime.now().minusMinutes(30);
+        usersRepository.deleteInactiveUsers(date);
     }
 }

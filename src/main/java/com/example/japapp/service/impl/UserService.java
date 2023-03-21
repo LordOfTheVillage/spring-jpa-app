@@ -7,6 +7,7 @@ import com.example.japapp.model.User;
 import com.example.japapp.exception.MainException;
 import com.example.japapp.repository.UsersRepository;
 import com.example.japapp.service.PasswordService;
+import jakarta.mail.MessagingException;
 import org.hibernate.Hibernate;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class UserService {
             user.setPassword(encodedPassword);
             roleService.setUserRole(user);
             this.emailService.register(user);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | MessagingException e) {
             throw new MainException("Unable to register user. Please try again later.");
         }
     }

@@ -2,6 +2,7 @@ package com.example.japapp.model;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -56,12 +57,11 @@ public class User {
     )
     private String verificationToken;
 
+    @Column(
+            name = "created_at",
+            nullable = false
+    )
     private LocalDateTime created_at;
-
-    @PrePersist
-    protected void onCreate() {
-        created_at = LocalDateTime.now();
-    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
@@ -108,6 +108,20 @@ public class User {
     public String getVerificationToken() {
         return verificationToken;
     }
+
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = LocalDateTime.now();
+    }
+
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
