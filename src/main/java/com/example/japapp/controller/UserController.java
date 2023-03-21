@@ -4,21 +4,25 @@ import com.example.japapp.dto.UserDto;
 import com.example.japapp.model.Book;
 import com.example.japapp.model.User;
 import com.example.japapp.exception.MainException;
-import com.example.japapp.service.impl.UsersService;
+import com.example.japapp.service.impl.EmailService;
+import com.example.japapp.service.impl.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RequestMapping
 @Controller
 public class UserController {
-    private final UsersService usersService;
-    public UserController(UsersService usersService) {
-        this.usersService = usersService;
+    private final UserService userService;
+    private final EmailService emailService;
+    public UserController(UserService userService, EmailService emailService) {
+        this.userService = userService;
+        this.emailService = emailService;
     }
     @GetMapping("")
     public String getHomePage() {
@@ -34,11 +38,17 @@ public class UserController {
     @PostMapping("/registration")
     public String postUser(@ModelAttribute("suspect") User suspect, HttpServletRequest request, Model model) {
         try {
-            UserDto savedUser = usersService.saveUser(suspect);
+            String verificationCode = emailService.generateVerificationCode();
+            emailService.sendVerificationEmail(suspect.getEmail(), verificationCode);
+            UserDto savedUser = userService.saveUser(suspect);
             request.getSession().setAttribute("user", savedUser);
         } catch (MainException e) {
             model.addAttribute("registerError", e.getMessage());
-            return "redirect:/registration";
+            return "registration";
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (jakarta.mail.MessagingException e) {
+            throw new RuntimeException(e);
         }
 
         return "redirect:/profile";
@@ -53,7 +63,7 @@ public class UserController {
     @PostMapping("/login")
     public String doLogin(@ModelAttribute("suspect") User suspect, HttpServletRequest request, RedirectAttributes redirectAttrs) {
         try {
-            UserDto user = usersService.authenticate(suspect.getEmail(), suspect.getPassword());
+            UserDto user = userService.authenticate(suspect.getEmail(), suspect.getPassword());
             request.getSession().setAttribute("user", user);
             return "redirect:/profile";
         } catch (MainException e) {
@@ -71,7 +81,7 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfile(HttpServletRequest request, Model model) {
         UserDto user = (UserDto) request.getSession().getAttribute("user");
-        List<Book> books = this.usersService.findAllBooksByUserId(user.getId());
+        List<Book> books = this.userService.findAllBooksByUserId(user.getId());
         model.addAttribute("profiler", user);
         model.addAttribute("books", books);
         return "profile";
@@ -81,7 +91,7 @@ public class UserController {
     public String setAdmin(HttpServletRequest request) {
         try {
             UserDto user = (UserDto) request.getSession().getAttribute("user");
-            user = usersService.setAdminRole(user.getId());
+            user = userService.setAdminRole(user.getId());
             request.getSession().setAttribute("user", user);
 
             return "redirect:/users";

@@ -21,6 +21,7 @@
                 placeholder="example@ex.com"
                 th:field="*{email}"
                 class="border-2 rounded-md px-2 py-1"
+                th:classappend="${registerError} ? 'border-red-500' : ''"
         >
     </div>
     <div class="flex flex-col">

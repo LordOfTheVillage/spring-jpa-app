@@ -2,7 +2,7 @@ package com.example.japapp.controller;
 
 import com.example.japapp.dto.UserDto;
 import com.example.japapp.exception.MainException;
-import com.example.japapp.service.impl.UsersService;
+import com.example.japapp.service.impl.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,14 +16,14 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    private final UsersService usersService;
-    public AdminController(UsersService usersService) {
-        this.usersService = usersService;
+    private final UserService userService;
+    public AdminController(UserService userService) {
+        this.userService = userService;
     }
     @GetMapping("/users")
     public String getUsersPage(Model model) {
         try {
-            List<UserDto> users = usersService.findAllUsers();
+            List<UserDto> users = userService.findAllUsers();
             model.addAttribute("users", users);
             return "users";
         } catch (MainException e) {

@@ -17,15 +17,15 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Service
-public class UsersService {
+public class UserService {
     private final UsersRepository usersRepository;
     private final PasswordService passwordService;
-    private final RolesService rolesService;
+    private final RoleService roleService;
 
-    public UsersService(UsersRepository usersRepository, PasswordService passwordService, RolesService rolesService) {
+    public UserService(UsersRepository usersRepository, PasswordService passwordService, RoleService roleService) {
         this.usersRepository = usersRepository;
         this.passwordService = passwordService;
-        this.rolesService = rolesService;
+        this.roleService = roleService;
     }
 
     public boolean isUserAuthenticated(HttpServletRequest request) {
@@ -45,7 +45,7 @@ public class UsersService {
         try {
             String encodedPassword = this.passwordService.hashPassword(user.getPassword());
             user.setPassword(encodedPassword);
-            rolesService.setUserRole(user);
+            roleService.setUserRole(user);
             User savedUser = usersRepository.save(user);
             return UserMapper.toUserDto(savedUser);
         } catch (DataAccessException e) {
@@ -85,7 +85,7 @@ public class UsersService {
         }
 
         User user = optionalUser.get();
-        rolesService.setAdminRole(user);
+        roleService.setAdminRole(user);
         User savedUser = usersRepository.save(user);
 
         return UserMapper.toUserDto(savedUser);

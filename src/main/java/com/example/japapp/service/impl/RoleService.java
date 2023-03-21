@@ -10,11 +10,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class RolesService {
+public class RoleService {
 
     private final RolesRepository rolesRepository;
 
-    public RolesService(RolesRepository rolesRepository) {
+    public RoleService(RolesRepository rolesRepository) {
         this.rolesRepository = rolesRepository;
     }
 
