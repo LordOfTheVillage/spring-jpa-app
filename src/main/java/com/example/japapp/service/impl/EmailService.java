@@ -18,10 +18,10 @@ import java.util.UUID;
 @Service
 public class EmailService {
 
-    private JavaMailSender javaMailSender;
-    private UsersRepository usersRepository;
-    private TemplateEngine templateEngine;
-    private HttpServletRequest request;
+    private final JavaMailSender javaMailSender;
+    private final UsersRepository usersRepository;
+    private final TemplateEngine templateEngine;
+    private final HttpServletRequest request;
 
     public EmailService(JavaMailSender javaMailSender,
                         UsersRepository usersRepository,

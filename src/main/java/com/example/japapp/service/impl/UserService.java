@@ -22,7 +22,7 @@ public class UserService {
     private final UsersRepository usersRepository;
     private final PasswordService passwordService;
     private final RoleService roleService;
-    private EmailService emailService;
+    private final EmailService emailService;
 
     public UserService(UsersRepository usersRepository,
                        PasswordService passwordService,
@@ -39,6 +39,7 @@ public class UserService {
         if (session != null) {
             Object userAttribute = session.getAttribute("user");
             // TODO: Logic of authenticate
+
             return userAttribute instanceof User;
         }
         return false;

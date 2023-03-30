@@ -19,10 +19,8 @@ import java.util.List;
 @Controller
 public class UserController {
     private final UserService userService;
-    private final EmailService emailService;
-    public UserController(UserService userService, EmailService emailService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.emailService = emailService;
     }
     @GetMapping("")
     public String getHomePage() {
@@ -38,10 +36,7 @@ public class UserController {
     @PostMapping("/registration")
     public String postUser(@ModelAttribute("suspect") User suspect, HttpServletRequest request, Model model) {
         try {
-//            String verificationCode = emailService.generateVerificationCode();
-//            emailService.sendVerificationEmail(suspect.getEmail(), verificationCode);
             userService.saveUser(suspect);
-//            request.getSession().setAttribute("user", savedUser);
         } catch (MainException e) {
             model.addAttribute("registerError", e.getMessage());
             return "registration";
