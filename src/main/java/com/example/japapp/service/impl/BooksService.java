@@ -50,7 +50,7 @@ public class BooksService {
         try {
             return booksRepository.save(book);
         } catch (DataAccessException e) {
-            throw new MainException("Cannot create book. Please try again later.");
+            throw new MainException("Cannot create book. Please try again later: " + e.getMessage());
         }
     }
 

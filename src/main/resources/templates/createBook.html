@@ -8,14 +8,18 @@
 <body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}">
 </div>
-<form class="flex flex-col" th:action="@{/create-book}" th:object="${book}" method="POST">
+<form class="flex flex-col" enctype="multipart/form-data" th:action="@{/create-book}" method="POST">
     <div class="mt-2 mb-2">
         <label th:text="#{profile.titleLabel} + ': '" for="title"></label>
-        <input type="text" id="title" placeholder="title" th:field="*{title}">
+        <input type="text" id="title" placeholder="title" name="title">
     </div>
     <div class="mb-2">
         <label th:text="#{profile.annotationLabel} + ': '" for="annotation"></label>
-        <input type="text" id="annotation" placeholder="annotation" th:field="*{annotation}">
+        <input type="text" id="annotation" placeholder="annotation" name="annotation">
+    </div>
+    <div class="mb-2">
+        <label th:text="#{profile.fileLabel} + ': '" for="image"></label>
+        <input type="file" id="image" placeholder="image" name="image">
     </div>
     <button class="text-left" type="submit" th:text="#{submitLabel}"></button>
 </form>

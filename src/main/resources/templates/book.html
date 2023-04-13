@@ -7,10 +7,11 @@
 </head>
 <body class="pl-10 pr-10">
 <div th:replace="~{fragments/header :: header}"></div>
-<h2 class="" th:text="#{book.page}"></h2>
+<h2 class="" th:text="#{book.page}" />
 <div class="">
-    <h1><span th:text="#{profile.titleLabel} + ': '"></span><span th:text="${book.title}"></span>!</h1>
-    <p><span th:text="#{profile.annotationLabel} + ': '"></span><span th:text="${book.annotation}"></span></p>
+    <h1><span th:text="#{profile.titleLabel} + ': '" /><span th:text="${book.title}" />!</h1>
+    <p><span th:text="#{profile.annotationLabel} + ': '" /><span th:text="${book.annotation}" /></p>
+    <img th:src="@{${image}}" alt="Book Image"  />
 </div>
 </body>
 </html>

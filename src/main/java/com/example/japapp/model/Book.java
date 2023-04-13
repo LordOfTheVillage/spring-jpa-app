@@ -37,9 +37,23 @@ public class Book {
     )
     private String annotation;
 
+    @Column(
+            name = "image"
+    )
+    private String image;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Book() {
+
+    }
+
+    public Book(String title, String annotation) {
+        this.title = title;
+        this.annotation = annotation;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -67,5 +81,17 @@ public class Book {
 
     public void setAnnotation(String annotation) {
         this.annotation = annotation;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public User getUser() {
+        return user;
     }
 }
