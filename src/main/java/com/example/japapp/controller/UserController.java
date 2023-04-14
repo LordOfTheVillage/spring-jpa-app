@@ -7,6 +7,8 @@ import com.example.japapp.exception.MainException;
 import com.example.japapp.service.impl.EmailService;
 import com.example.japapp.service.impl.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,26 +20,32 @@ import java.util.List;
 @RequestMapping
 @Controller
 public class UserController {
+    private static final Logger logger = LogManager.getLogger(UserController.class);
     private final UserService userService;
     public UserController(UserService userService) {
         this.userService = userService;
     }
     @GetMapping("")
     public String getHomePage() {
+        logger.info("GET HOME PAGE");
         return "home";
     }
 
     @GetMapping("/registration")
     public String getRegistrationPage(Model model) {
+        logger.info("GET REGISTRATION PAGE");
         model.addAttribute("suspect", new User());
         return "registration";
     }
 
     @PostMapping("/registration")
     public String postUser(@ModelAttribute("suspect") User suspect, HttpServletRequest request, Model model) {
+        logger.info("POST REGISTRATION PAGE");
+        logger.debug("SUSPECT {}", suspect);
         try {
             userService.saveUser(suspect);
         } catch (MainException e) {
+            logger.error("ERROR {}", e.getMessage());
             model.addAttribute("registerError", e.getMessage());
             return "registration";
         }
